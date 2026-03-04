@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Question for Mahal</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fff0f3;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            overflow: hidden;
+        }
+        h1 { color: #ff4d6d; margin-bottom: 20px; transition: all 0.3s; }
+        .container { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 85%; max-width: 500px; z-index: 10; position: relative; }
+        .buttons { display: flex; flex-direction: column; gap: 20px; justify-content: center; margin-top: 30px; align-items: center; min-height: 200px; }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            width: fit-content;
+        }
+        #yesBtn { background-color: #ff4d6d; color: white; z-index: 20; }
+        #noBtn { background-color: #adb5bd; color: white; position: relative; transition: all 0.2s ease; }
+        .hidden { display: none; }
+        p { color: #555; line-height: 1.5; font-size: 1.2rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="questionArea" class="container">
+        <h1 id="mainText">Will you go on a date with me, Mahal? ❤️</h1>
+        <div class="buttons">
+            <button id="yesBtn" onclick="tryYes()">Yes!</button>
+            <button id="noBtn" onclick="handleNo()" onmouseover="moveButton()">No</button>
+        </div>
+    </div>
+
+    <div id="successArea" class="container hidden">
+        <h1>Yay! See you then, Mahal! 💍✨</h1>
+        <p>I love you!</p>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const mainText = document.getElementById('mainText');
+        
+        let noClickCount = 0;
+        const noPhrases = [
+            "Are you sure, Mahal?",
+            "Really? Think again...",
+            "What if I treat you to a coffee? ☕",
+            "I'll be very sad...",
+            "Mahal, please say yes? 🙏",
+            "I'll even pack our bags for Australia early! 🇦🇺",
+            "Wrong button! Try the pink one. 😉",
+            "Okay, now you're just teasing me! Haha",
+            "Last chance to click this..."
+        ];
+
+        function tryYes() {
+            // Trick: Forces her to click 'No' at least 3 times before 'Yes' works
+            if (noClickCount < 3) {
+                mainText.innerText = "Wait! Are you sure? Try clicking 'No' first just to see what happens... 😉";
+                yesBtn.style.transform = "scale(0.8)";
+                setTimeout(() => { yesBtn.style.transform = "scale(1)"; }, 500);
+            } else {
+                celebrate();
+            }
+        }
+
+        function handleNo() {
+            if (noClickCount < noPhrases.length) {
+                noBtn.innerText = noPhrases[noClickCount];
+                mainText.innerText = "Will you go on a date with me, Mahal? ❤️";
+                
+                // Grow the Yes button
+                let currentFontSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+                yesBtn.style.fontSize = (currentFontSize + 12) + "px";
+                
+                noClickCount++;
+            }
+        }
+
+        function moveButton() {
+            // Once phrases run out, the button dodges the cursor
+            if (noClickCount >= noPhrases.length) {
+                noBtn.innerText = "Can't catch me! 🏃‍♂️";
+                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = x + 'px';
+                noBtn.style.top = y + 'px';
+            }
+        }
+
+        function celebrate() {
+            document.getElementById('questionArea').classList.add('hidden');
+            document.getElementById('successArea').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
